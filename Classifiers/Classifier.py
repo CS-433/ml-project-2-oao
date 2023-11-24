@@ -1,8 +1,16 @@
 from abc import ABC, abstractmethod
 
 class Classifier(ABC):
-    def __init__(self, config):
+    def __init__(self, config, model_path=None):
         self.config = config
+        self.model = None
+        if model_path:
+            model = self.load_model(model_path)
+        self.metrics = {}
+
+    @abstractmethod
+    def load_model(self, path):
+        pass
 
     @abstractmethod
     def train(self, train_data, train_labels):
@@ -15,7 +23,7 @@ class Classifier(ABC):
     @abstractmethod
     def save(self, path):
         pass
-    
+
     @abstractmethod
-    def preprocess(self, data):
-        pass
+    def get_metrics(self):
+        return self.metrics.copy()
