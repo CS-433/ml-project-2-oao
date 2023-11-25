@@ -6,7 +6,6 @@ class Classifier(ABC):
     def __init__(self, config):
         self.config = config
         self.model = None
-
         if 'model_path' in config:
             self.load_model(config['model_path'])
             
@@ -17,7 +16,7 @@ class Classifier(ABC):
         pass
 
     @abstractmethod
-    def train(self, train_data, train_labels):
+    def train(self, X, y):
         pass
 
     @abstractmethod

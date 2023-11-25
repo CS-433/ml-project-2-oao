@@ -9,6 +9,14 @@ def remove_punctuation(text: str) -> str:
     """
     return text.translate(str.maketrans('', '', string.punctuation))
 
+def identity(text: str) -> str:
+    """
+    returns the text as it is
+    :param text: text to return
+    :return: text
+    """
+    return text
+
 def remove_stopwords(text: str) -> str:
     """
     removes all stopwords from a string

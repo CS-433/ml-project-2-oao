@@ -1,7 +1,9 @@
+print('Loading Classifiers...')
 from Classifiers.Classifier import Classifier
 from Classifiers.BERT import BERT
 from Classifiers.XGBoost import XGBoost
 from Classifiers.XLNet import XLNet
+print('Finished loading Classifiers')
 
 from TextProc.Preprocessor import Preprocessor
 
@@ -32,7 +34,19 @@ class TrainEngine():
         :param path: path to csv file
         :return: pandas dataframe
         """
-        return pd.read_csv(data_path)
+        # load the dataset of texts one text per line
+        with open('{}/train_pos.txt'.format(data_path), 'r') as f:
+            train_pos = f.readlines()
+
+        with open('{}/train_neg.txt'.format(data_path), 'r') as f:
+            train_neg = f.readlines()
+
+        # create a dataframe with the text and label
+        train_df = pd.DataFrame({'text': np.concatenate([train_pos, train_neg]),
+                            'label': np.concatenate([np.ones(len(train_pos)), np.zeros(len(train_neg))])
+                            })
+        return train_df
+
     
     def save_metrics(self, metrics: dict, path: str) -> None:
         """
@@ -80,6 +94,11 @@ class TrainEngine():
         X = self.preprocessor.preprocess(X)
         # split data into train and validation
         X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2)
+        # convert to list
+        X_train = X_train['text'].tolist()
+        X_val = X_val['text'].tolist()
+        y_train = y_train.tolist()
+        y_val = y_val.tolist()
 
         print('Training...')
         # train
@@ -91,11 +110,11 @@ class TrainEngine():
 
         print('Testing...')
         # test
-        metrics = self.model.validate(X_val, y_val)
+        outputs = self.model.validate(X_val, y_val)
 
         print('Metrics:')
-        # printing metrics
-        self.print_metrics(metrics)
+        # print metrics
+        
 
     def print_metrics(self, metrics: dict) -> None:
         """
@@ -106,28 +125,33 @@ class TrainEngine():
             print('{}: {}'.format(key, value))
 
 
-if __name__ == "main":
+if __name__ == '__main__':
     """
     This file is used to train a model on a given training dataset
     using the specified configurations.
     """
     # getting current date time for saving results and metrics
+    print('Getting current date time...')
     now = datetime.now()
     current_time = now.strftime("%m-%d-%Y-%H:%M:%S")
 
+    print('Parsing arguments...')
     # parsing command line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--train_config', type=str, default='bert_base')
-    parser.add_argument('--train_data_path', type=str, default='Data/train.csv')
-    parser.parse_args('--save_model_path', type=str, default='Models/model_{}.pt'.format(current_time))
+    parser.add_argument('--train_config', type=str, default='bert_config_train', required=False)
+    parser.add_argument('--train_data_path', type=str, default='Data/twitter-datasets', required=False)
+    parser.add_argument('--save_model_path', type=str, default='Models/model_{}.pt'.format(current_time), required=False)
 
     args = parser.parse_args()
 
+    print('Loading config...')
     # loading config
-    config = getattr(configs, args.train_config)
+    config = configs.get_config(args.train_config)
 
+    print('Initializing train engine...')
     # initializing train engine
     engine = TrainEngine(config, args.train_data_path, args.save_model_path)
 
+    print('Running training...')
     # running training
     engine.run()

@@ -1,4 +1,4 @@
-from Classifier import Classifier
+from Classifiers.Classifier import Classifier
 import pandas as pd
 
 class XGBoost(Classifier):
