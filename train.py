@@ -1,19 +1,28 @@
-from datetime import datetime
-from Classifiers import Classifier
-from TextProc import Preprocessor
+from Classifiers.Classifier import Classifier
+from Classifiers.BERT import BERT
+from Classifiers.XGBoost import XGBoost
+from Classifiers.XLNet import XLNet
+
+from TextProc.Preprocessor import Preprocessor
+
+import configs
 
 import argparse
+from datetime import datetime
 import pandas as pd
 import numpy as np
+# import train test validation split from sklearn
+from sklearn.model_selection import train_test_split
+
 
 class TrainEngine():
-    def __init__(self, config, train_data_path, verbose):
+    def __init__(self, config, train_data_path, save_path):
         self.config = config
         self.train_data_path = train_data_path
-        self.verbose = verbose
+        self.save_model_path = save_path
 
         # intialize classifier and preprocessor
-        self.model = Classifier(config['model_config'])
+        self.model = self.choose_model(config['model_config'])
         self.preprocessor = Preprocessor(config['preproc_config'])
 
 
@@ -41,32 +50,60 @@ class TrainEngine():
         """
         pd.DataFrame(predictions).to_csv(path)
 
+    def choose_model(self, model_config: dict) -> Classifier:
+        """
+        chooses a model based on the model_type
+        :param model_type: type of model to be chosen
+        :return: model
+        """
+        if model_config['model_type'] == 'bert':
+            return BERT(model_config)
+        elif model_config['model_type'] == 'xgboost':
+            return XGBoost(model_config)
+        elif model_config['model_type'] == 'xlnet':
+            return XLNet(model_config)
+        else:
+            raise ValueError('Model type not supported')
+
+
 
     def run(self):
         print('Loading data...')
         # load data
-        train_data = self.load_data(self.train_data_path)
+        X = self.load_data(self.train_data_path)
+        y = X['label']
+        # drop label column
+        X.drop('label', axis=1, inplace=True)
+
         print('Preprocessing data...')
         # preprocess data
-        train_data = self.preprocessor.preprocess(train_data)
+        X = self.preprocessor.preprocess(X)
+        # split data into train and validation
+        X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2)
+
         print('Training...')
         # train
-        self.model.train(train_data)
+        self.model.train(X_train, y_train)
+
         print('Saving model...')
         # save model
-        self.model.save(self.model_path)
+        self.model.save(self.save_model_path)
+
         print('Testing...')
         # test
-        test_data = self.load_data(self.test_data_path)
-        test_data = self.preprocessor.preprocess(test_data)
-        predictions = self.model.predict(test_data)
-        print('Saving predictions...')
-        # save predictions
-        self.save_predictions(predictions, self.output_path)
-        print('Saving metrics...')
-        # save metrics
-        self.save_metrics(self.model.get_metrics(), self.metrics_path)
-        print('Done.')
+        metrics = self.model.validate(X_val, y_val)
+
+        print('Metrics:')
+        # printing metrics
+        self.print_metrics(metrics)
+
+    def print_metrics(self, metrics: dict) -> None:
+        """
+        prints the metrics
+        :param metrics: metrics to be printed
+        """
+        for key, value in metrics.items():
+            print('{}: {}'.format(key, value))
 
 
 if __name__ == "main":
@@ -80,9 +117,17 @@ if __name__ == "main":
 
     # parsing command line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str, default='bert_base')
+    parser.add_argument('--train_config', type=str, default='bert_base')
     parser.add_argument('--train_data_path', type=str, default='Data/train.csv')
-    parser.add_argument('test_data_path', type=str, default='Data/test.csv')
-    parser.parse_args('model_path', type=str, default='Models/model_{}.pt'.format(current_time))
+    parser.parse_args('--save_model_path', type=str, default='Models/model_{}.pt'.format(current_time))
 
     args = parser.parse_args()
+
+    # loading config
+    config = getattr(configs, args.train_config)
+
+    # initializing train engine
+    engine = TrainEngine(config, args.train_data_path, args.save_model_path)
+
+    # running training
+    engine.run()

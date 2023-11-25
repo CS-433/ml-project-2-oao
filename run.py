@@ -1,8 +1,15 @@
+from TextProc.Preprocessor import Preprocessor
+
+from Classifiers.Classifier import Classifier
+from Classifiers.BERT import BERT
+from Classifiers.XGBoost import XGBoost
+from Classifiers.XLNet import XLNet
+
+import configs
+
 from datetime import datetime
-from Classifiers import Classifier
-from TextProc import Preprocessor
-from Models import model_configs
 import argparse
+import pandas as pd
 
 class PredictEngine():
     def __init__(self, config, predict_data_path, output_path, verbose):
@@ -12,8 +19,39 @@ class PredictEngine():
         self.verbose = verbose
 
         # intialize classifier and preprocessor
-        self.model = Classifier(config['model_config'])
+        self.model = self.choose_model(config['model_config'])
         self.preprocessor = Preprocessor(config['preproc_config'])
+
+    def load_data(self, data_path: str) -> pd.DataFrame:
+        """
+        loads data from a csv file
+        :param path: path to csv file
+        :return: pandas dataframe
+        """
+        return pd.read_csv(data_path)
+    
+    def save_predictions(self, predictions: list, path: str) -> None:
+        """
+        saves predictions to a csv file
+        :param predictions: predictions to be saved
+        :param path: path to csv file
+        """
+        pd.DataFrame(predictions).to_csv(path)
+
+    def choose_model(self, model_config: dict) -> Classifier:
+        """
+        chooses a model based on the model_type
+        :param model_type: type of model to be chosen
+        :return: model
+        """
+        if model_config['model_type'] == 'bert':
+            return BERT(model_config)
+        elif model_config['model_type'] == 'xgboost':
+            return XGBoost(model_config)
+        elif model_config['model_type'] == 'xlnet':
+            return XLNet(model_config)
+        else:
+            raise ValueError('Invalid model type.')
 
 
     def run(self):
@@ -43,16 +81,14 @@ if __name__ == '__main__':
 
     # parsing command line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str, default='bert_base')
-    parser.add_argument('--metrics', type=bool, default=False)
+    parser.add_argument('--test_config', type=str, default='bert_base')
     parser.add_argument('--verbose', type=bool, default=True)
     parser.add_argument('--predict_data_path', type=str, default='Data/test.csv')
     parser.add_argument('--output_path', type=str, default='Results/predictions_{}.csv'.format(current_time))
-    parser.add_argument('--metrics_path', type=str, default='Results/metrics_{}.csv'.format(current_time))
     args = parser.parse_args()
 
     # load configuration
-    config = model_configs.load_config(args.config)
+    config = getattr(configs, args.test_config)
 
     # initialize engine
     engine = PredictEngine(config, args.predict_data_path, args.output_path, args.verbose)

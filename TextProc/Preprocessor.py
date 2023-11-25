@@ -1,6 +1,8 @@
 from helper import *
 from preproc_configs import config_1
 
+import pandas as pd
+
 class Preprocessor():
     def __init__(self, process_config):
         self.process_config = process_config
@@ -15,6 +17,17 @@ class Preprocessor():
         for func in self.process_config:
             text = func(text)
         return text
+    
+    def preprocess(self, data: pd.DataFrame) -> pd.DataFrame:
+        """
+        preprocesses a dataframe by applying all functions
+        specified in the preprocessing configuration
+        :param data: data to be preprocessed
+        :return: preprocessed data
+        """
+        for func in self.process_config:
+            data = data.apply(func)
+        return data
     
 
 if __name__ == '__main__':
