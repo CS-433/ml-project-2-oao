@@ -1,36 +1,19 @@
 from Classifiers.Classifier import Classifier
-import pandas as pd
+import numpy as np
 
 class XGBoost(Classifier):
     def __init__(self, config: dict, model_path: str = None):
         super().__init__(config, model_path)
         
 
-    def train(self, data: pd.DataFrame) -> None:
-        """
-        trains the model
-        :param data: training data
-        """
-        pass
+    def load_model(self, pat: str) -> int:
+        raise NotImplementedError
 
-    def predict(self, data: pd.DataFrame) -> list:
-        """
-        predicts the labels for the data
-        :param data: data to be predicted
-        :return: predictions
-        """
-        pass
+    def train(self, X: np.array, y: np.array):
+        raise NotImplementedError
 
-    def save(self, path: str) -> None:
-        """
-        saves the model
-        :param path: path to save the model
-        """
-        pass
+    def predict(self, X: np.array) -> np.array:
+        raise NotImplementedError
 
-    def load(self, path: str) -> None:
-        """
-        loads the model
-        :param path: path to load the model
-        """
-        pass
+    def save(self, path: str) -> int:
+        raise NotImplementedError

@@ -20,7 +20,7 @@ class Classifier(ABC):
         pass
 
     @abstractmethod
-    def predict(self, test_data):
+    def predict(self, X):
         pass
 
     @abstractmethod
