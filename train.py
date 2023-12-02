@@ -17,6 +17,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 
+# print current directory
+import os
+print(os.getcwd())
+
 class TrainEngine():
     def __init__(self, config, train_data_path, save_path):
         self.config = config
@@ -35,16 +39,18 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        with open('{}/train_pos.txt'.format(data_path), 'r') as f:
+        with open('{}/t_pos.txt'.format(data_path), 'r') as f:
             train_pos = f.readlines()
 
-        with open('{}/train_neg.txt'.format(data_path), 'r') as f:
+        with open('{}/t_neg.txt'.format(data_path), 'r') as f:
             train_neg = f.readlines()
 
         # create a dataframe with the text and label
         train_df = pd.DataFrame({'text': np.concatenate([train_pos, train_neg]),
                             'label': np.concatenate([np.ones(len(train_pos)), np.zeros(len(train_neg))])
                             })
+        
+        print('size of train_df:', train_df.shape)
         return train_df
 
     
@@ -79,7 +85,13 @@ class TrainEngine():
         else:
             raise ValueError('Model type not supported')
 
-
+    def print_metrics(self, metrics: dict) -> None:
+        """
+        prints the metrics
+        :param metrics: metrics to be printed
+        """
+        for key, value in metrics.items():
+            print('{}: {}'.format(key, value))
 
     def run(self):
         print('Loading data...')
@@ -95,34 +107,32 @@ class TrainEngine():
         # split data into train and validation
         X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2)
         # convert to list
-        X_train = X_train['text'].tolist()
-        X_val = X_val['text'].tolist()
-        y_train = y_train.tolist()
-        y_val = y_val.tolist()
+        X_train = np.array(X_train['text'].tolist())
+        X_val = np.array(X_val['text'].tolist())
+        y_train = np.array(y_train.tolist())
+        y_val = np.array(y_val.tolist())
+        y_val = np.array([-1 if y == 0 else 1 for y in y_val])
 
         print('Training...')
         # train
         self.model.train(X_train, y_train)
 
-        print('Saving model...')
-        # save model
-        self.model.save(self.save_model_path)
+        # print('Saving model...')
+        # # save model
+        # self.model.save(self.save_model_path)
 
         print('Testing...')
         # test
         outputs = self.model.validate(X_val, y_val)
+        print('Outputs:', outputs)
 
         print('Metrics:')
-        # print metrics
+        metrics = self.model.get_metrics()
+        self.print_metrics(metrics)
+
         
 
-    def print_metrics(self, metrics: dict) -> None:
-        """
-        prints the metrics
-        :param metrics: metrics to be printed
-        """
-        for key, value in metrics.items():
-            print('{}: {}'.format(key, value))
+
 
 
 if __name__ == '__main__':

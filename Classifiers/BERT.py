@@ -13,7 +13,7 @@ class BERT(Classifier):
     def __init__(self, config: dict):
         super().__init__(config)
         if self.model == None:
-            self.build_bert_classifier(config['model_name'])
+            self.build_bert_classifier()
         
     def load_model(self, path: str) -> int:
         """
@@ -72,9 +72,9 @@ class BERT(Classifier):
         :return: True if the model was built successfully
         """
         text_input = tf.keras.layers.Input(shape=(), dtype=tf.string, name='text')
-        preprocessing_layer = hub.KerasLayer(self.config['bert_preproc'], name='preprocessing')
+        preprocessing_layer = hub.KerasLayer(self.config['model_preproc'], name='preprocessing')
         encoder_inputs = preprocessing_layer(text_input)
-        encoder = hub.KerasLayer(self.config['bert_encoder'], trainable=True, name='BERT_encoder')
+        encoder = hub.KerasLayer(self.config['model_encoder'], trainable=True, name='BERT_encoder')
         outputs = encoder(encoder_inputs)
         net = outputs['pooled_output']
         net = tf.keras.layers.Dropout(0.1)(net)
