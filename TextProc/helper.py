@@ -125,7 +125,7 @@ def correct_word(word: str)->str:
         return word
 
 def replace_hashtag(text: str)-> str:
-    return re.sub(r'#', 'talking about ', text)
+    return re.sub(r'#', ' talking about ', text)
 
 
 def remove_numbers(text: str) -> str:
