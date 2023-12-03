@@ -4,6 +4,7 @@ from simpletransformers.classification import ClassificationModel
 import numpy as np
 import pandas as pd
 import pickle
+import torch
 
 
 
@@ -47,10 +48,11 @@ class XLNet(Classifier):
         Builds the XLNet classifier
         :return: None
         """
+        cuda_available = torch.cuda.is_available()
         self.model = ClassificationModel(
             "xlnet",
             "xlnet-base-cased",
             num_labels=2,
-            use_cuda=False,
+            use_cuda=cuda_available,
             args=self.config,
         )
