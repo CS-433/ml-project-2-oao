@@ -17,6 +17,11 @@ configurations = {
         'model_config': model_configs.xlnet_base_train,
         'preproc_config': preproc_configs.preproc_config_1
     },
+
+    'bert_config_test' : {
+        'model_config': model_configs.bert_base_test,
+        'preproc_config': preproc_configs.preproc_config_1
+    },
 }
 
 def get_config(config_name: str):

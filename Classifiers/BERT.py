@@ -20,7 +20,6 @@ class BERT(Classifier):
         loads the model
         :param path: path to load the model
         """
-
         self.model = tf.saved_model.load(path)
         return 1
     
@@ -88,7 +87,10 @@ class BERT(Classifier):
         :param data: data to be predicted
         :return: predictions
         """
-        return self.model.predict(X)
+        predictions = tf.sigmoid(self.model(tf.constant(X.tolist())))
+        predictions = np.array(predictions).flatten()
+        predictions = np.array([1 if p > 0.5 else -1 for p in predictions])
+        return predictions
 
     def save(self, path: str) -> int:
         """

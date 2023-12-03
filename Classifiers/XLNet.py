@@ -40,9 +40,7 @@ class XLNet(Classifier):
         return preds
 
     def save(self, path: str) -> int:
-        # save the model to a pickle file
-        with open(path, "wb") as f:
-            pickle.dump(self.model, f)
+        pass
     
     def build_xlnet_classifier(self):
         """

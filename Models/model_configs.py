@@ -27,8 +27,6 @@ bert_large_train = {
 xlnet_base_train = {
     'model_type': 'xlnet',
     'model_name': 'xlnet-base-cased',
-    'output_dir': 'test/',
-    'best_model_dir': 'test/best_model/',
     'train_batch_size': 32,
    'max_seq_length': 64,
    'num_train_epochs': 4,
@@ -38,4 +36,9 @@ xlnet_base_train = {
    'warmup_steps': 1,
    'eval_all_checkpoints': True,
    'reprocess_input_data': False,
+}
+
+bert_base_test = {
+    'model_type': 'bert',
+    'model_path': 'Models/model_12-02-2023-19:51:52'
 }
