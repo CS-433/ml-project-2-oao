@@ -27,6 +27,7 @@ bert_large_train = {
 xlnet_base_train = {
     'model_type': 'xlnet',
     'model_name': 'xlnet-base-cased',
+    'overwrite_output_dir': True,
     'train_batch_size': 32,
    'max_seq_length': 64,
    'num_train_epochs': 4,

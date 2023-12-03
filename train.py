@@ -15,6 +15,7 @@ import pandas as pd
 import numpy as np
 # import train test validation split from sklearn
 from sklearn.model_selection import train_test_split
+from copy import deepcopy
 
 
 # print current directory
@@ -40,8 +41,8 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        pos_path = '{}/train_pos.txt'.format(data_path)
-        neg_path = '{}/train_neg.txt'.format(data_path)
+        pos_path = '{}/t_pos.txt'.format(data_path)
+        neg_path = '{}/t_neg.txt'.format(data_path)
         test_path = '{}/test_data.txt'.format(data_path)
 
         if train:
@@ -92,12 +93,15 @@ class TrainEngine():
         if model_config['model_type'] == 'bert':
             return BERT(model_config)
         elif model_config['model_type'] == 'xgboost':
-            # add item to model_config
-            model_config['output_dir'] = self.save_model_path
-            model_config['best_model_dir'] = self.save_model_path + '/best_model/'
             return XGBoost(model_config)
         elif model_config['model_type'] == 'xlnet':
-            return XLNet(model_config)
+            # add item to model_config
+            mc = deepcopy(model_config)
+            mc['output_dir'] = self.save_model_path
+            mc['best_model_dir'] = self.save_model_path + '/best_model/'
+            mc['cache_dir'] = self.save_model_path + '/cache_dir/'
+            mc['tensorboard_dir'] = self.save_model_path + '/tensorboard_dir/'
+            return XLNet(mc)
         else:
             raise ValueError('Model type not supported')
 

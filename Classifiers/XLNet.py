@@ -21,8 +21,10 @@ class XLNet(Classifier):
 
     def load_model(self, path: str) -> int:
         # load the model from a pickle file
-        with open(path, "rb") as f:
-            self.model = pickle.load(f)
+        self.model = ClassificationModel(
+            "xlnet",
+            path
+        )
         return 1
 
     def train(self, X: np.array, y: np.array) -> int:

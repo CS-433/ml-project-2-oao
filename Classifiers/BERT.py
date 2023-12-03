@@ -23,7 +23,7 @@ class BERT(Classifier):
         self.model = tf.saved_model.load(path)
         return 1
     
-    def train(self, X: np.array, y: np.array) -> tf.keras.callbacks.History:
+    def train(self, X: np.array, y: np.array) -> int:
         """
         Trains the Bert Classifier
         :param X: training data
@@ -57,9 +57,9 @@ class BERT(Classifier):
                                  validation_split=self.config['validation_split'],
                                epochs=self.config['epochs'])
         
-        return history
+        return 1
 
-    def build_bert_classifier(self) -> bool:
+    def build_bert_classifier(self) -> int:
         """
         Builds the bert model
         The model is built using the tensorflow hub
