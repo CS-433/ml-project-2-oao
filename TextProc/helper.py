@@ -3,20 +3,58 @@ from nltk.corpus import stopwords
 from wordsegment import load, segment
 import pickle as pkl
 import re
+import json
 
 
 word_dict = pkl.load(open('word_dict.pkl', 'rb'))
 load()
 
+# setting up the stopwords list
 negation_words = [
     "not", "no", "never", "none", "nobody", "nothing", "neither", "nor", "nowhere",
     "hardly", "scarcely", "barely", "rarely", "seldom", "little", "don't", "can't",
     "won't", "isn't", "aren't", "couldn't", "wasn't", "weren't", "haven't", "hasn't",
     "hadn't", "shouldn't", "wouldn't", "mustn't", "mightn't"
 ]
+stop_words = list((set(stopwords.words('english')) - set(negation_words)).union(set(['<user>', '<url>'])))
 
+# setting up the emoticon dictionary
+emoticon_mapping = {
+    r':-?\)': ' <happy> ',
+    r':-?\(': ' <sad> ',
+    r':-?D': ' <big grin> ',
+    r':-?P': ' <tongue out> ',
+    r';-?\)': ' <wink> ',
+    r':\'?\(': ' <crying> ',
+    r':-\|': ' <neutral> ',
+    r':-\/': ' <skepticism or disapproval> ',
+    r':-O': ' <surprise> ',
+    r':-\*': ' <kiss> ',
+    r'8-\)': ' <cool or sunglasses> ',
+    r'<3': ' <love> ',
+    r'\^-^': ' <happy or excited> ',
+    r'XD': ' <laughing> ',
+    r'-_-\'': ' <disapproval or disbelief> ',
+    r':v': ' <pac-man> ',
+    r'¯\\_(ツ)_/¯': ' <shrug or meh> ',
+    
+    # Variations with space between face and mouth
+    r': -?\)': '<happy>',
+    r': -?\(': '<sad>',
+    r': -?D': '<big grin>',
+    r': -?P': '<tongue out>',
+    r'; -?\)': '<wink>',
+    r': \'?\(': '<crying>',
+    r': -\|': '<neutral>',
+    r': -\/': '<skepticism or disapproval>',
+    r': -O': '<surprise>',
+    r': -\*': '<kiss>',
+    r'8 -?\)': '<cool or sunglasses>',
+}
 
-
+# setting up the slang dictionary
+with open('ShortendText.json', 'r') as f:
+    slang_dict = json.load(f)
 
 
 
@@ -37,19 +75,34 @@ def identity(text: str) -> str:
     """
     return text
 
+def slang_to_english(text: list) -> list:
+    """
+    converts slang words to english
+    :param text: text to convert
+    :return: converted text
+    """
+    # open the slang json
 
-def remove_stopwords(text: str) -> str:
+    # replace slang words with english
+    return [slang_dict[word] if word in slang_dict else word for word in text]
+
+def replace_emoticons(text: str) -> str:
+    """
+    replaces emoticons with their meaning
+    :param text: text to replace emoticons in
+    :return: text with replaced emoticons
+    """
+    for emoticon, meaning in emoticon_mapping.items():
+        text = re.sub(emoticon, meaning, text)
+    return text
+
+def remove_stopwords(text: list) -> list:
     """
     removes all stopwords from a string
     :param text: text to remove stopwords from
     :return: text without stopwords
     """
-    return ' '.join([word for word in text.split() if word not in stopwords.words('english')])
-
-
-#remove stopwords if they are not negation words and remove <url> and <user>
-def remove_stopwords_non_neg(words: list)-> list:
-    return [word for word in words if (word not in stopwords.words('english') or word in negation_words) and word not in ['<user>', '<url>']]
+    return [word for word in text if word not in stop_words]
 
 def to_lowercase(text: str) -> str:
     """
