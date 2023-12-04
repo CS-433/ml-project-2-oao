@@ -12,3 +12,29 @@ preproc_config_2 = [
     remove_numbers,
     remove_whitespace
 ]
+
+preproc_config_nocontext = [
+    replace_emoticons, 
+    replace_hashtag,
+    segment_words,
+    list_to_string,
+    make_two_consecutive,
+    string_to_list,
+    slang_to_english,
+    correct_word,
+    remove_stopwords,
+    lemmatize_word,
+    list_to_string
+]
+
+preproc_config_context = [
+    replace_emoticons, 
+    replace_hashtag,
+    segment_words,
+    list_to_string,
+    make_two_consecutive,
+    string_to_list,
+    slang_to_english,
+    correct_word,
+    list_to_string
+]

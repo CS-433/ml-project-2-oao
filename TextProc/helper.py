@@ -5,9 +5,14 @@ import pickle as pkl
 import re
 import json
 
+import nltk
+nltk.download('wordnet')
+from nltk.stem import 	WordNetLemmatizer
+
 
 word_dict = pkl.load(open('Data/emnlp_dict.pkl', 'rb'))
 load()
+wordnet_lemmatizer = WordNetLemmatizer()
 
 # setting up the stopwords list
 negation_words = [
@@ -67,6 +72,25 @@ def remove_punctuation(text: str) -> str:
     """
     return text.translate(str.maketrans('', '', string.punctuation))
 
+def replace_hashtag(text: str)-> str:
+    return re.sub(r'#', ' talking about ', text)
+
+def list_to_string(text: list) -> str:
+    """
+    converts a list to a string
+    :param text: list to convert
+    :return: string
+    """
+    return ' '.join(text)
+
+def string_to_list(text: str) -> list:
+    """
+    converts a string to a list
+    :param text: string to convert
+    :return: list
+    """
+    return text.split()
+
 def identity(text: str) -> str:
     """
     returns the text as it is
@@ -84,7 +108,7 @@ def slang_to_english(text: list) -> list:
     # open the slang json
 
     # replace slang words with english
-    return [slang_dict[word] if word in slang_dict else word for word in text]
+    return [slang_dict.get(word, word) for word in text]
 
 def replace_emoticons(text: str) -> str:
     """
@@ -118,11 +142,8 @@ def make_two_consecutive(text : str) -> str:
 def segment_words(text: str) -> list:
     return segment(text)
 
-# def correct_word(word: str)->str:
-#     if word in word_dict:
-#         return word_dict[word]
-#     else:
-#         return word
+def correct_word(word: list)->list:
+    return [word_dict.get(w, w) for w in word]
 
 def replace_hashtag(text: str)-> str:
     return re.sub(r'#', ' talking about ', text)
@@ -159,3 +180,7 @@ def remove_short_words(text: str) -> str:
     :return: text without short words
     """
     return ' '.join([word for word in text.split() if len(word) >= 3])
+
+def lemmatize_word(text: list)-> list:
+    return [wordnet_lemmatizer.lemmatize(w) for w in text]
+
