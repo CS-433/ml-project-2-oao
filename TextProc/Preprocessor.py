@@ -4,8 +4,9 @@ from TextProc.preproc_configs import preproc_config_1
 import pandas as pd
 
 class Preprocessor():
-    def __init__(self, process_config):
+    def __init__(self, process_config, verbose: bool = False):
         self.process_config = process_config
+        self.verbose = verbose
 
     def preprocess_string(self, text: str) -> str:
         """
@@ -29,4 +30,6 @@ class Preprocessor():
             # print the name of the function
             print(func.__name__)
             data['text'] = data['text'].apply(func)
+            if self.verbose:
+                print(data.head())
         return data

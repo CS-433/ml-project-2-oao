@@ -1,6 +1,6 @@
 import string
 from nltk.corpus import stopwords
-from wordsegment import load, segment
+import wordninja
 import pickle as pkl
 import re
 import json
@@ -11,7 +11,6 @@ from nltk.stem import 	WordNetLemmatizer
 
 
 word_dict = pkl.load(open('Data/emnlp_dict.pkl', 'rb'))
-load()
 wordnet_lemmatizer = WordNetLemmatizer()
 
 # setting up the stopwords list
@@ -73,7 +72,15 @@ def remove_punctuation(text: str) -> str:
     return text.translate(str.maketrans('', '', string.punctuation))
 
 def replace_hashtag(text: str)-> str:
-    return re.sub(r'#', ' talking about ', text)
+    """
+    Splits the text by space and check if word starts with # and if it does it replaces it with talking about
+    and segment the word right after the #
+    """
+    words = text.split(' ')
+    for i in range(len(words)):
+        if words[i].startswith('#'):
+            words[i] = 'talking about ' + ' '.join(wordninja.split(words[i][1:]))
+    return ' '.join(words)
 
 def list_to_string(text: list) -> str:
     """
@@ -137,16 +144,23 @@ def to_lowercase(text: str) -> str:
     return text.lower()
 
 def make_two_consecutive(text : str) -> str:
-    return re.sub(r'(.)\1{2,}', r'\1\1', text)
+    modified_string = re.sub(r'([bcdefghjklmnopqrstvwxyz])\1{2,}', r'\1\1', text)
+    modified_string = re.sub(r'([aiu])\1+', r'\1', modified_string)
+    return modified_string
 
-def segment_words(text: str) -> list:
-    return segment(text)
+def segment_words(text: string) -> list:
+    """
+    segments words in a list
+    :param text: text to segment
+    :return: segmented text
+    """
+    return wordninja.split(text)
 
 def correct_word(word: list)->list:
     return [word_dict.get(w, w) for w in word]
 
-def replace_hashtag(text: str)-> str:
-    return re.sub(r'#', ' talking about ', text)
+# def replace_hashtag(text: str)-> str:
+#     return re.sub(r'#', ' talking about ', text)
 
 
 def remove_numbers(text: str) -> str:

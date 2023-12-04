@@ -14,11 +14,9 @@ preproc_config_2 = [
 ]
 
 preproc_config_nocontext = [
-    replace_emoticons, 
-    replace_hashtag,
-    segment_words,
-    list_to_string,
+    replace_emoticons,
     make_two_consecutive,
+    replace_hashtag,
     string_to_list,
     slang_to_english,
     correct_word,
@@ -29,10 +27,8 @@ preproc_config_nocontext = [
 
 preproc_config_context = [
     replace_emoticons, 
-    replace_hashtag,
-    segment_words,
-    list_to_string,
     make_two_consecutive,
+    replace_hashtag,
     string_to_list,
     slang_to_english,
     correct_word,
