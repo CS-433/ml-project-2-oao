@@ -26,5 +26,7 @@ class Preprocessor():
         :return: preprocessed data
         """
         for func in self.process_config:
-            data = data.apply(func)
+            # print the name of the function
+            print(func.__name__)
+            data['text'] = data['text'].apply(func)
         return data

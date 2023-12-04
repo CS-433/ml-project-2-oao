@@ -26,8 +26,8 @@ stop_words = list((set(stopwords.words('english')) - set(negation_words)).union(
 # setting up the emoticon dictionary
 emoticon_mapping = {
     r':-?\)': ' <happy> ',
-    r':-?\(': ' <sad> ',
-    r':-?D': ' <big grin> ',
+    r':-?\(': ' sad ',
+    r':-?D': ' big grin ',
     r':-?P': ' <tongue out> ',
     r';-?\)': ' <wink> ',
     r':\'?\(': ' <crying> ',
