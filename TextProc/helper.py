@@ -6,7 +6,7 @@ import re
 import json
 
 
-word_dict = pkl.load(open('word_dict.pkl', 'rb'))
+word_dict = pkl.load(open('Data/emnlp_dict.pkl', 'rb'))
 load()
 
 # setting up the stopwords list
