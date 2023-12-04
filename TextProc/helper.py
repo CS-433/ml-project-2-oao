@@ -53,7 +53,7 @@ emoticon_mapping = {
 }
 
 # setting up the slang dictionary
-with open('ShortendText.json', 'r') as f:
+with open('TextProc/ShortendText.json', 'r') as f:
     slang_dict = json.load(f)
 
 
@@ -118,11 +118,11 @@ def make_two_consecutive(text : str) -> str:
 def segment_words(text: str) -> list:
     return segment(text)
 
-def correct_word(word: str)->str:
-    if word in word_dict:
-        return word_dict[word]
-    else:
-        return word
+# def correct_word(word: str)->str:
+#     if word in word_dict:
+#         return word_dict[word]
+#     else:
+#         return word
 
 def replace_hashtag(text: str)-> str:
     return re.sub(r'#', ' talking about ', text)

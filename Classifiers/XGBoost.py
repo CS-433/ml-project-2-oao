@@ -5,12 +5,9 @@ import os
 
 
 class XGBoost(Classifier):
-    def __init__(self, config: dict, model_path: str = None):
+    def __init__(self, config: dict):
         super().__init__(config)
-        self.model_path = model_path
         self.model = None
-        if model_path:
-            self.load_model(model_path)
 
     def load_model(self, path: str) -> int:
         if os.path.exists(path):
