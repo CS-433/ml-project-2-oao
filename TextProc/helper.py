@@ -1,5 +1,8 @@
 import string
 from nltk.corpus import stopwords
+from textblob import TextBlob
+import spacy
+nlp = spacy.load('en_core_web_trf')
 import wordninja
 import pickle as pkl
 import re
@@ -66,6 +69,26 @@ with open('TextProc/ShortendText.json', 'r') as f:
     slang_dict = json.load(f)
 
 
+def correct_text(text: list)->list:
+    """
+    Performs a series of checks to correct a word
+        - first checks if the word is in the dictionary
+        - segments the word
+        - translates the segments from slang to english
+        - corrects spelling mistakes
+        - if word still not in dictionary, take the first suggestion given by enchant
+    :param text: text to correct
+    :return: corrected text
+    """
+    text = str(nlp(' '.join(text))).split()
+    for word in text:
+        if TextBlob(word).correct().raw != word:
+            words = wordninja.split(word)
+            words = [slang_dict.get(w, w) for w in words]
+            words = [word_dict.get(w, w) for w in words]
+            words = [TextBlob(word).correct().raw for w in words]
+            word = ' '.join(words)
+    return text
 
 
 def remove_punctuation(text: str) -> str:
@@ -74,8 +97,8 @@ def remove_punctuation(text: str) -> str:
     :param text: text to remove punctuation from
     :return: text without punctuation
     """
-    # replace punctuation with space
-    text = text.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
+    # replace all punctiation except ' with a space
+    text = text.translate(str.maketrans(string.punctuation.replace('\'', ''), ' ' * (len(string.punctuation) - 1)))
     # remove double spaces
     text = re.sub(' +', ' ', text)
     return text
