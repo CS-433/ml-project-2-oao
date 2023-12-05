@@ -32,6 +32,7 @@ emoticon_mapping = {
     r':\'?\(': ' <crying> ',
     r':-\|': ' <neutral> ',
     r':-\/': ' <skepticism or disapproval> ',
+    r':\'\)': ' tears of joy ',
     r':-O': ' <surprise> ',
     r':-\*': ' <kiss> ',
     r'8-\)': ' <cool or sunglasses> ',
@@ -41,6 +42,7 @@ emoticon_mapping = {
     r'-_-\'': ' <disapproval or disbelief> ',
     r':v': ' <pac-man> ',
     r'¯\\_(ツ)_/¯': ' <shrug or meh> ',
+    r'\.\.\.': ' pause ',
     
     # Variations with space between face and mouth
     r': -?\)': '<happy>',
@@ -54,6 +56,9 @@ emoticon_mapping = {
     r': -O': '<surprise>',
     r': -\*': '<kiss>',
     r'8 -?\)': '<cool or sunglasses>',
+    r':\' \)': ' tears of joy ',
+    # regex that matches anything between < and >
+    r'<[^>]*>': ''
 }
 
 # setting up the slang dictionary
@@ -69,7 +74,11 @@ def remove_punctuation(text: str) -> str:
     :param text: text to remove punctuation from
     :return: text without punctuation
     """
-    return text.translate(str.maketrans('', '', string.punctuation))
+    # replace punctuation with space
+    text = text.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
+    # remove double spaces
+    text = re.sub(' +', ' ', text)
+    return text
 
 def replace_hashtag(text: str)-> str:
     """
@@ -79,7 +88,7 @@ def replace_hashtag(text: str)-> str:
     words = text.split(' ')
     for i in range(len(words)):
         if words[i].startswith('#'):
-            words[i] = 'talking about ' + ' '.join(wordninja.split(words[i][1:]))
+            words[i] = 'talking about ' + ' '.join(wordninja.split(''.join(correct_word([words[i][1:]]))))
     return ' '.join(words)
 
 def list_to_string(text: list) -> str:
