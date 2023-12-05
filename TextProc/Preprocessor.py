@@ -1,5 +1,6 @@
 from TextProc.helper import *
 from TextProc.preproc_configs import preproc_config_1
+from tqdm import tqdm
 
 import pandas as pd
 
@@ -26,10 +27,15 @@ class Preprocessor():
         :param data: data to be preprocessed
         :return: preprocessed data
         """
+        texts = data['text'].tolist()
         for func in self.process_config:
             # print the name of the function
             print(func.__name__)
-            data['text'] = data['text'].apply(func)
+            # use tqdm to show progress bar gradually
+            for i in tqdm(range(len(texts))):
+                texts[i] = func(texts[i])
             if self.verbose:
                 print(data.head())
+
+        data['text'] = texts
         return data

@@ -2,7 +2,7 @@ import string
 from nltk.corpus import stopwords
 from textblob import TextBlob
 import spacy
-nlp = spacy.load('en_core_web_trf')
+nlp = spacy.load('en_core_web_md')
 import wordninja
 import pickle as pkl
 import re
