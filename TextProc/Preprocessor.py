@@ -4,6 +4,8 @@ from tqdm import tqdm
 
 import pandas as pd
 
+tqdm.pandas()
+
 class Preprocessor():
     def __init__(self, process_config, verbose: bool = False):
         self.process_config = process_config
@@ -27,15 +29,9 @@ class Preprocessor():
         :param data: data to be preprocessed
         :return: preprocessed data
         """
-        texts = data['text'].tolist()
         for func in self.process_config:
             # print the name of the function
             print(func.__name__)
-            # use tqdm to show progress bar gradually
-            for i in tqdm(range(len(texts))):
-                texts[i] = func(texts[i])
-            if self.verbose:
-                print(data.head())
-
-        data['text'] = texts
+            # apply the function to the data and print the progression
+            data['text'] = data['text'].progress_apply(func)
         return data

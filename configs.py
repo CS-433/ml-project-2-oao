@@ -5,7 +5,7 @@ from Models import model_configs
 configurations = {
     'bert_config_train' : {
         'model_config': model_configs.bert_base_train,
-        'preproc_config': preproc_configs.preproc_config_1
+        'preproc_config': preproc_configs.preproc_config_context
     },
 
     'bert_config_train_2' : {
@@ -15,12 +15,17 @@ configurations = {
 
     'xlnet_config_train' : {
         'model_config': model_configs.xlnet_base_train,
-        'preproc_config': preproc_configs.preproc_config_1
+        'preproc_config': preproc_configs.preproc_config_context
+    },
+
+    'xlnet_config_test' : {
+        'model_config': model_configs.xlnet_base_test,
+        'preproc_config': preproc_configs.preproc_config_context
     },
 
     'bert_config_test' : {
         'model_config': model_configs.bert_base_test,
-        'preproc_config': preproc_configs.preproc_config_1
+        'preproc_config': preproc_configs.preproc_config_context
     },
 }
 

@@ -11,8 +11,10 @@ import torch
 class XLNet(Classifier):
     def __init__(self, config: dict):
         config = config.copy()
-        config.pop('model_type')
-        config.pop('model_name')
+        if 'model_type' in config:
+            config.pop('model_type')
+        if 'model_name' in config:
+            config.pop('model_name')
 
         super().__init__(config)
         if self.model == None:
@@ -21,9 +23,11 @@ class XLNet(Classifier):
 
     def load_model(self, path: str) -> int:
         # load the model from a pickle file
+        cuda_available = torch.cuda.is_available()
         self.model = ClassificationModel(
             "xlnet",
-            path
+            path,
+            use_cuda=torch.cuda.is_available(),
         )
         return 1
 
@@ -32,8 +36,12 @@ class XLNet(Classifier):
         train_df = pd.DataFrame()
         train_df["text"] = X
         train_df["labels"] = y
+        # split the data into training and validation sets
+        val_df = train_df.sample(frac=self.config['validation_split'])
+        train_df.drop(val_df.index, inplace=True)
+
         # train the model
-        self.model.train_model(train_df)
+        self.model.train_model(train_df, eval_df=val_df)
         return 1
 
     def predict(self, X: np.array) -> np.array:

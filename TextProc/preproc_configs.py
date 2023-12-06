@@ -33,7 +33,5 @@ preproc_config_context = [
     remove_punctuation,
     string_to_list,
     correct_text,
-    slang_to_english,
-    correct_word,
     list_to_string
 ]

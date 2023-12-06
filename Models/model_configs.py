@@ -28,18 +28,28 @@ xlnet_base_train = {
     'model_type': 'xlnet',
     'model_name': 'xlnet-base-cased',
     'overwrite_output_dir': True,
+    'use_multiprocessing': False,
+    'use_multiprocessing_for_evaluation': False,
     'train_batch_size': 32,
    'max_seq_length': 64,
+   'validation_split': 0.15,
    'num_train_epochs': 4,
    'learning_rate': 4e-5,
    'adam_epsilon': 1e-6,
    'warmup_ratio': 0.06,
    'warmup_steps': 1,
-   'eval_all_checkpoints': True,
+   'no_cache': True,
+   'evaluate_during_training': True,
+   'evaluate_during_training_verbose': True,
    'reprocess_input_data': False,
 }
 
 bert_base_test = {
     'model_type': 'bert',
     'model_path': 'Models/model_12-02-2023-19:51:52'
+}
+
+xlnet_base_test = {
+    'model_type': 'xlnet',
+    'model_path': 'Models/XLNet/model_12-06-2023-10:47:04/best_model/'
 }

@@ -1,5 +1,3 @@
-
-
 abbreviations = {
     "$" : " dollar ",
     "€" : " euro ",
