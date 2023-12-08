@@ -29,6 +29,8 @@ class Preprocessor():
         :param data: data to be preprocessed
         :return: preprocessed data
         """
+        # create a copy of the dataframe
+        data = data.copy()
         for func in self.process_config:
             # print the name of the function
             print(func.__name__)

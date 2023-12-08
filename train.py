@@ -43,8 +43,8 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        pos_path = '{}/train_pos_full.txt'.format(data_path)
-        neg_path = '{}/t_neg_full.txt'.format(data_path)
+        pos_path = '{}/train_pos_partial_prep.txt'.format(data_path)
+        neg_path = '{}/train_neg_partial_prep.txt'.format(data_path)
         test_path = '{}/test_data.txt'.format(data_path)
 
         if train:
@@ -127,7 +127,7 @@ class TrainEngine():
 
             print('Preprocessing data...')
             # preprocess data
-            X = self.preprocessor.preprocess(X)
+            # X = self.preprocessor.preprocess(X)
 
             # drop label column
             X.drop('label', axis=1, inplace=True)
@@ -200,7 +200,8 @@ if __name__ == '__main__':
     # parsing command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('--train_config', type=str, default='bert_config_train', required=False)
-    parser.add_argument('--train', type=bool, default=True, required=False)
+    # add a boolean argument to specify whether to train or test
+    parser.add_argument('--train', action='store_true', required=False)
     parser.add_argument('--train_data_path', type=str, default='Data/twitter-datasets', required=False)
     parser.add_argument('--save_model_path', type=str, default='model_{}'.format(current_time), required=False)
     parser.add_argument('--save_result', type=str, default='Results/predictions.csv', required=False)
