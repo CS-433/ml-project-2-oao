@@ -43,8 +43,8 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        pos_path = '{}/train_pos_partial_prep.txt'.format(data_path)
-        neg_path = '{}/train_neg_partial_prep.txt'.format(data_path)
+        pos_path = '{}/train_pos_full.txt'.format(data_path)
+        neg_path = '{}/train_neg_full.txt'.format(data_path)
         test_path = '{}/test_data.txt'.format(data_path)
 
         if train:
@@ -127,7 +127,7 @@ class TrainEngine():
 
             print('Preprocessing data...')
             # preprocess data
-            # X = self.preprocessor.preprocess(X)
+            X = self.preprocessor.preprocess(X)
 
             # drop label column
             X.drop('label', axis=1, inplace=True)
