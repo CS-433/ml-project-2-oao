@@ -19,10 +19,10 @@ preproc_config_nocontext = [
     replace_hashtag,
     remove_punctuation,
     string_to_list,
-    slang_to_english,
-    correct_word,
     decontracted,
     remove_stopwords,
+    list_to_string,
+    apply_spacy,
     lemmatize_word,
     list_to_string
 ]
