@@ -96,10 +96,7 @@ def decontracted(text: list) -> list:
 def correct_text(text: list)->list:
     text = [slang_dict.get(word, word) for word in text]
     text = [word_dict.get(word, word) for word in text]
-    indices = [TextBlob(word).correct().raw != word for word in text]
-    text = [wordninja.split(word) if index else [word] for word, index in zip(text, indices)]
-    text = [item for sublist in text for item in sublist]
-    text = [TextBlob(word).correct().raw for word in text]
+    # text = [TextBlob(word).correct().raw for word in text]
     return text
 
 
@@ -120,9 +117,11 @@ def replace_hashtag(text: str)-> str:
     Splits the text by space and check if word starts with # and if it does it replaces it with talking about
     and segment the word right after the #
     """
-    words = text.split(' ')
+    words = text.split()
     for i in range(len(words)):
         if words[i].startswith('#'):
+            words[i] = slang_dict.get(words[i], words[i])
+            words[i] = word_dict.get(words[i], words[i])
             words[i] = 'talking about ' + ' '.join(wordninja.split(''.join(correct_word([words[i][1:]]))))
     return ' '.join(words)
 

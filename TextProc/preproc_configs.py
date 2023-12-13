@@ -32,8 +32,11 @@ preproc_config_context = [
     make_two_consecutive,
     replace_hashtag,
     remove_punctuation,
-    apply_spacy,
-    correct_text,
+    string_to_list,
     decontracted,
+    list_to_string,
+    apply_spacy,
+    decontracted,
+    correct_text,
     list_to_string
 ]

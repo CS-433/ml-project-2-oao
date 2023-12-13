@@ -11,7 +11,7 @@ class Preprocessor():
         self.process_config = process_config
         self.verbose = verbose
 
-    def preprocess_string(self, text: str) -> str:
+    def preprocess_string(self, texts: list) -> list:
         """
         preprocesses a text by applying all functions
         specified in the preprocessing configuration
@@ -19,8 +19,10 @@ class Preprocessor():
         :return: preprocessed text
         """
         for func in self.process_config:
-            text = func(text)
-        return text
+            texts = [func(texts[0])]
+            if self.verbose:
+                print(texts[0])
+        return texts
     
     def preprocess(self, data: pd.DataFrame) -> pd.DataFrame:
         """
@@ -39,5 +41,8 @@ class Preprocessor():
             else:
                 # apply the function to the data and print the progression
                 data['text'] = data['text'].progress_apply(func)
+
+            if self.verbose:
+                print(data['text'].iloc[0])
 
         return data
