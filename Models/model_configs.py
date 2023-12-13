@@ -30,7 +30,7 @@ xlnet_base_train = {
     'overwrite_output_dir': True,
     'use_multiprocessing': False,
     'use_multiprocessing_for_evaluation': False,
-    'train_batch_size': 32,
+    'train_batch_size': 512,
    'max_seq_length': 200,
    'validation_split': 0.15,
    'num_train_epochs': 10,

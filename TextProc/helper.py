@@ -7,6 +7,9 @@ import wordninja
 import pickle as pkl
 import re
 import json
+import contractions
+
+from tqdm import tqdm
 
 import nltk
 nltk.download('wordnet')
@@ -69,7 +72,7 @@ with open('TextProc/ShortendText.json', 'r') as f:
     slang_dict = json.load(f)
 
 
-def correct_text(text: list)->list:
+def apply_spacy(texts: list)->list:
     """
     Performs a series of checks to correct a word
         - first checks if the word is in the dictionary
@@ -80,14 +83,23 @@ def correct_text(text: list)->list:
     :param text: text to correct
     :return: corrected text
     """
-    text = str(nlp(' '.join(text))).split()
-    for word in text:
-        if TextBlob(word).correct().raw != word:
-            words = wordninja.split(word)
-            words = [slang_dict.get(w, w) for w in words]
-            words = [word_dict.get(w, w) for w in words]
-            words = [TextBlob(word).correct().raw for w in words]
-            word = ' '.join(words)
+    result = []
+    for doc in tqdm(nlp.pipe(texts)):
+        result.append([token.text for token in doc])
+
+    return result
+
+def decontracted(text: list) -> list:
+    return [contractions.fix(word) for word in text]
+
+
+def correct_text(text: list)->list:
+    text = [slang_dict.get(word, word) for word in text]
+    text = [word_dict.get(word, word) for word in text]
+    indices = [TextBlob(word).correct().raw != word for word in text]
+    text = [wordninja.split(word) if index else [word] for word, index in zip(text, indices)]
+    text = [item for sublist in text for item in sublist]
+    text = [TextBlob(word).correct().raw for word in text]
     return text
 
 

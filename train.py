@@ -16,7 +16,6 @@ import numpy as np
 from tqdm import tqdm
 # import train test validation split from sklearn
 from sklearn.model_selection import train_test_split
-from copy import deepcopy
 
 
 # print current directory
@@ -43,8 +42,8 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        pos_path = '{}/train_pos_full.txt'.format(data_path)
-        neg_path = '{}/train_neg_full.txt'.format(data_path)
+        pos_path = '{}/train_pos_preprocessed.txt'.format(data_path)
+        neg_path = '{}/train_neg_preprocessed.txt'.format(data_path)
         test_path = '{}/test_data.txt'.format(data_path)
 
         if train:
@@ -127,7 +126,7 @@ class TrainEngine():
 
             print('Preprocessing data...')
             # preprocess data
-            X = self.preprocessor.preprocess(X)
+            # X = self.preprocessor.preprocess(X)
 
             # drop label column
             X.drop('label', axis=1, inplace=True)
@@ -214,7 +213,7 @@ if __name__ == '__main__':
 
     print('Initializing train engine...')
     # initializing train engine
-    engine = TrainEngine(args.train, config, args.train_data_path, args.save_model_path, args.save_result)
+    engine = TrainEngine(True, config, args.train_data_path, args.save_model_path, args.save_result)
 
     print('Running training...')
     # running training

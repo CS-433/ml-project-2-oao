@@ -21,6 +21,7 @@ preproc_config_nocontext = [
     string_to_list,
     slang_to_english,
     correct_word,
+    decontracted,
     remove_stopwords,
     lemmatize_word,
     list_to_string
@@ -31,7 +32,8 @@ preproc_config_context = [
     make_two_consecutive,
     replace_hashtag,
     remove_punctuation,
-    string_to_list,
+    apply_spacy,
     correct_text,
+    decontracted,
     list_to_string
 ]

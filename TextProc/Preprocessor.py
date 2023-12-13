@@ -34,6 +34,10 @@ class Preprocessor():
         for func in self.process_config:
             # print the name of the function
             print(func.__name__)
-            # apply the function to the data and print the progression
-            data['text'] = data['text'].progress_apply(func)
+            if func.__name__ == 'apply_spacy':
+                data['text'] = apply_spacy(data['text'].tolist())
+            else:
+                # apply the function to the data and print the progression
+                data['text'] = data['text'].progress_apply(func)
+
         return data
