@@ -127,6 +127,29 @@ def replace_emoticons(text: str) -> str:
         text = re.sub(emoticon, meaning, text)
     return text
 
+def replace_unmatched_parentheses(text:str) -> str:
+    stack = []
+    result = ""
+    
+    for char in text:
+        if char == '(':
+            stack.append(char)
+            result += char
+        elif char == ')':
+            if len(stack) > 0:
+                stack.pop()
+                result += char
+            else:
+                result += 'smiling'
+        else:
+            result += char
+    
+    while len(stack) > 0:
+        result += 'sad'
+        stack.pop()
+    
+    return result
+
 def remove_stopwords(text: list) -> list:
     """
     removes all stopwords from a string
