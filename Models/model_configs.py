@@ -1,4 +1,5 @@
-
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from gensim.models import Word2Vec
 
 bert_base_train = {
     'model_type': 'bert',
@@ -42,6 +43,23 @@ xlnet_base_train = {
    'evaluate_during_training': True,
    'evaluate_during_training_verbose': True,
    'reprocess_input_data': False,
+}
+
+xgboost_base_train = {
+    'model_type': 'xgboost',
+    'xgb_config': {
+        'learning_rate': 0.189,
+        'max_depth': 10,
+        'n_estimators': 800,
+        'subsample': 0.881,
+    },
+    'vectorizer_config': {
+        'vectorizer': "word2vec",
+        'vector_size': 300,
+        'window': 5,
+        'min_count': 1,
+        'workers': 4,
+    }
 }
 
 bert_base_test = {
