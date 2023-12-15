@@ -23,6 +23,7 @@ preproc_config_nocontext = [
     remove_stopwords,
     list_to_string,
     apply_spacy,
+    correct_text,
     lemmatize_word,
     list_to_string
 ]

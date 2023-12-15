@@ -27,6 +27,11 @@ configurations = {
         'model_config': model_configs.bert_base_test,
         'preproc_config': preproc_configs.preproc_config_context
     },
+
+    'xgboost_config_train' : {
+        'model_config': model_configs.xgboost_base_train,
+        'preproc_config': preproc_configs.preproc_config_nocontext
+    },
 }
 
 def get_config(config_name: str):
