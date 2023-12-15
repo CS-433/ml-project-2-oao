@@ -17,20 +17,26 @@ preproc_config_nocontext = [
     replace_emoticons,
     make_two_consecutive,
     replace_hashtag,
+    remove_punctuation,
     string_to_list,
-    slang_to_english,
-    correct_word,
+    decontracted,
     remove_stopwords,
+    list_to_string,
+    apply_spacy,
     lemmatize_word,
     list_to_string
 ]
 
 preproc_config_context = [
-    replace_emoticons, 
+    replace_emoticons,
     make_two_consecutive,
     replace_hashtag,
+    remove_punctuation,
     string_to_list,
-    slang_to_english,
-    correct_word,
+    decontracted,
+    list_to_string,
+    apply_spacy,
+    decontracted,
+    correct_text,
     list_to_string
 ]

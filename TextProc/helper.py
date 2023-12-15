@@ -1,9 +1,15 @@
 import string
 from nltk.corpus import stopwords
+from textblob import TextBlob
+import spacy
+nlp = spacy.load('en_core_web_md')
 import wordninja
 import pickle as pkl
 import re
 import json
+import contractions
+
+from tqdm import tqdm
 
 import nltk
 nltk.download('wordnet')
@@ -32,6 +38,7 @@ emoticon_mapping = {
     r':\'?\(': ' <crying> ',
     r':-\|': ' <neutral> ',
     r':-\/': ' <skepticism or disapproval> ',
+    r':\'\)': ' tears of joy ',
     r':-O': ' <surprise> ',
     r':-\*': ' <kiss> ',
     r'8-\)': ' <cool or sunglasses> ',
@@ -41,6 +48,7 @@ emoticon_mapping = {
     r'-_-\'': ' <disapproval or disbelief> ',
     r':v': ' <pac-man> ',
     r'¯\\_(ツ)_/¯': ' <shrug or meh> ',
+    r'\.\.\.': ' pause ',
     
     # Variations with space between face and mouth
     r': -?\)': '<happy>',
@@ -54,6 +62,9 @@ emoticon_mapping = {
     r': -O': '<surprise>',
     r': -\*': '<kiss>',
     r'8 -?\)': '<cool or sunglasses>',
+    r':\' \)': ' tears of joy ',
+    # regex that matches anything between < and >
+    r'<[^>]*>': ''
 }
 
 # setting up the slang dictionary
@@ -61,6 +72,32 @@ with open('TextProc/ShortendText.json', 'r') as f:
     slang_dict = json.load(f)
 
 
+def apply_spacy(texts: list)->list:
+    """
+    Performs a series of checks to correct a word
+        - first checks if the word is in the dictionary
+        - segments the word
+        - translates the segments from slang to english
+        - corrects spelling mistakes
+        - if word still not in dictionary, take the first suggestion given by enchant
+    :param text: text to correct
+    :return: corrected text
+    """
+    result = []
+    for doc in tqdm(nlp.pipe(texts)):
+        result.append([token.text for token in doc])
+
+    return result
+
+def decontracted(text: list) -> list:
+    return [contractions.fix(word) for word in text]
+
+
+def correct_text(text: list)->list:
+    text = [slang_dict.get(word, word) for word in text]
+    text = [word_dict.get(word, word) for word in text]
+    # text = [TextBlob(word).correct().raw for word in text]
+    return text
 
 
 def remove_punctuation(text: str) -> str:
@@ -69,17 +106,23 @@ def remove_punctuation(text: str) -> str:
     :param text: text to remove punctuation from
     :return: text without punctuation
     """
-    return text.translate(str.maketrans('', '', string.punctuation))
+    # replace all punctiation except ' with a space
+    text = text.translate(str.maketrans(string.punctuation.replace('\'', ''), ' ' * (len(string.punctuation) - 1)))
+    # remove double spaces
+    text = re.sub(' +', ' ', text)
+    return text
 
 def replace_hashtag(text: str)-> str:
     """
     Splits the text by space and check if word starts with # and if it does it replaces it with talking about
     and segment the word right after the #
     """
-    words = text.split(' ')
+    words = text.split()
     for i in range(len(words)):
         if words[i].startswith('#'):
-            words[i] = 'talking about ' + ' '.join(wordninja.split(words[i][1:]))
+            words[i] = slang_dict.get(words[i], words[i])
+            words[i] = word_dict.get(words[i], words[i])
+            words[i] = 'talking about ' + ' '.join(wordninja.split(''.join(correct_word([words[i][1:]]))))
     return ' '.join(words)
 
 def list_to_string(text: list) -> str:
