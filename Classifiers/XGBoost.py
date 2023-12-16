@@ -2,7 +2,7 @@ from Classifiers.Classifier import Classifier
 import numpy as np
 import xgboost as xgb
 import os
-
+import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import gensim
 
@@ -11,12 +11,14 @@ class XGBoost(Classifier):
     def __init__(self, config: dict):
         super().__init__(config['xgb_config'])
         self.config = config
-        self.model = None
 
     def load_model(self, path: str) -> int:
         if os.path.exists(path):
-            self.model = xgb.Booster()
-            self.model.load_model(path)
+            self.model = pickle.load(open(path+'/model.pkl', 'rb'))
+            # load vectorizer
+            # if therer exists a file named vectorizer in the path, load the vectorizer
+            if os.path.exists(path+'/vectorizer.pkl'):
+                self.vectorizer = pickle.load(open(path+'/vectorizer.pkl', 'rb'))
             return 0  # Model loaded successfully
         else:
             return -1  # Model file not found
@@ -36,7 +38,11 @@ class XGBoost(Classifier):
 
     def save(self, path: str) -> int:
         if self.model:
-            self.model.save_model(path)
+            pickle.dump(self.model, open(path+'/model.pkl', 'wb'))
+            # save vectorizer
+            print('this is the vectorizer type', self.config['vectorizer_config']['vectorizer'])
+            if self.config['vectorizer_config']['vectorizer'] == 'word2vec':
+                pickle.dump(self.vectorizer, open(path+'/vectorizer.pkl', 'wb'))
             return 0  # Model saved successfully
         else:
             return -1  # No model to save
@@ -45,7 +51,10 @@ class XGBoost(Classifier):
     class Word2Vec():
         def __init__(self, config: dict, texts: list):
             texts = [text.split() for text in texts]
-            self.wv = gensim.models.Word2Vec(sentences=texts, vector_size= config['vector_size'], window=config['window'], min_count=config['min_count'], workers=config['workers'])
+            if 'vector_size' in config:
+                self.wv = gensim.models.Word2Vec(sentences=texts, vector_size= config['vector_size'], window=config['window'], min_count=config['min_count'], workers=config['workers'])
+            else:
+                self.wv = None
 
         def fit_transform(self, X: list) -> list:
             # vectorize each word in the sentence and take the mean
@@ -59,6 +68,7 @@ class XGBoost(Classifier):
                     vectors = np.zeros(self.wv.vector_size)
                 vectorized_texts.append(vectors)
             return np.array(vectorized_texts)
+        
 
     class Vectorizer():
         def __init__(self, config: dict, texts: list):
@@ -73,3 +83,4 @@ class XGBoost(Classifier):
 
         def vectorize(self, X: np.array) -> np.array:
             return self.vectorizer.fit_transform(X)
+        

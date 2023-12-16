@@ -71,3 +71,13 @@ xlnet_base_test = {
     'model_type': 'xlnet',
     'model_path': 'Models/XLNet/model_12-06-2023-10:47:04/best_model/'
 }
+
+xgboost_base_test = {
+    'model_type': 'xgboost',
+    'xgb_config': {
+        'model_path': 'Models/XGBoost/AlisXGB'
+    },
+    'vectorizer_config': {
+        'vectorizer': "word2vec"
+    }
+}

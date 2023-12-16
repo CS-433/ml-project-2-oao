@@ -15,14 +15,17 @@ preproc_config_2 = [
 
 preproc_config_nocontext = [
     replace_emoticons,
+    replace_unmatched_parentheses,
     make_two_consecutive,
     replace_hashtag,
     remove_punctuation,
-    string_to_list,
+    #list_to_string,
+    #apply_spacy,
     decontracted,
+    string_to_list,
     remove_stopwords,
-    list_to_string,
-    apply_spacy,
+    #list_to_string,
+    #apply_spacy,
     correct_text,
     lemmatize_word,
     list_to_string
@@ -30,10 +33,10 @@ preproc_config_nocontext = [
 
 preproc_config_context = [
     replace_emoticons,
+    replace_unmatched_parentheses,
     make_two_consecutive,
     replace_hashtag,
     remove_punctuation,
-    string_to_list,
     decontracted,
     list_to_string,
     apply_spacy,

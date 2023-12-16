@@ -85,12 +85,12 @@ def apply_spacy(texts: list)->list:
     """
     result = []
     for doc in tqdm(nlp.pipe(texts)):
-        result.append([token.text for token in doc])
+        result.append(' '.join([token.text for token in doc]))
 
     return result
 
-def decontracted(text: list) -> list:
-    return [contractions.fix(word) for word in text]
+def decontracted(text: str) -> str:
+    return contractions.fix(text)
 
 
 def correct_text(text: list)->list:
