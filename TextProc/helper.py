@@ -183,12 +183,12 @@ def replace_unmatched_parentheses(text:str) -> str:
                 stack.pop()
                 result += char
             else:
-                result += 'smiling'
+                result += ' smiling '
         else:
             result += char
     
     while len(stack) > 0:
-        result += 'sad'
+        result += ' sad '
         stack.pop()
     
     return result
