@@ -26,7 +26,7 @@ negation_words = [
     "won't", "isn't", "aren't", "couldn't", "wasn't", "weren't", "haven't", "hasn't",
     "hadn't", "shouldn't", "wouldn't", "mustn't", "mightn't"
 ]
-stop_words = list((set(stopwords.words('english')) - set(negation_words)).union(set(['<user>', '<url>'])))
+stop_words = list((set(stopwords.words('english')) - set(negation_words)))
 
 # setting up the emoticon dictionary
 emoticon_mapping = {
@@ -188,7 +188,7 @@ def replace_unmatched_parentheses(text:str) -> str:
             result += char
     
     while len(stack) > 0:
-        result += ' '
+        result += ' parenthesis '
         stack.pop()
     
     return result
