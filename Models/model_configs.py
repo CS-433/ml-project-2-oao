@@ -32,7 +32,7 @@ xlnet_base_train = {
    'max_seq_length': 200,
    'validation_split': 0.15,
    'num_train_epochs': 10,
-   'learning_rate': 4e-10,
+   'learning_rate': 4e-7,
    'adam_epsilon': 1e-6,
    'warmup_ratio': 0.06,
    'warmup_steps': 1,
