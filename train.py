@@ -42,8 +42,8 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        pos_path = '{}/train_pos_preprocessed_nocontext_v1.txt'.format(data_path)
-        neg_path = '{}/train_neg_preprocessed_nocontext_v1.txt'.format(data_path)
+        pos_path = '{}/train_pos_full_preprocessed_nocontext.txt'.format(data_path)
+        neg_path = '{}/train_neg_full_preprocessed_nocontext.txt'.format(data_path)
         test_path = '{}/test_data.txt'.format(data_path)
 
         if train:
@@ -132,7 +132,7 @@ class TrainEngine():
             X.drop('label', axis=1, inplace=True)
 
             # split data into train and validation
-            X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2)
+            X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.005)
             # convert to list
             X_train = np.array(X_train['text'].tolist())
             X_val = np.array(X_val['text'].tolist())
@@ -162,7 +162,7 @@ class TrainEngine():
             # load data
             X = self.load_data(self.train_data_path, train=False)
             # preprocess data
-            X = self.preprocessor.preprocess(X)
+            # X = self.preprocessor.preprocess(X)
             # convert to list
             X_val = X['text'].to_numpy()
 

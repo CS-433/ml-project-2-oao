@@ -50,12 +50,12 @@ xgboost_base_train = {
     'xgb_config': {
         'learning_rate': 0.189,
         'max_depth': 10,
-        'n_estimators': 800,
+        'n_estimators': 742,
         'subsample': 0.881,
     },
     'vectorizer_config': {
         'vectorizer': "word2vec",
-        'vector_size': 300,
+        'vector_size': 350,
         'window': 5,
         'min_count': 1,
         'workers': 4,
@@ -76,6 +76,16 @@ xgboost_base_test = {
     'model_type': 'xgboost',
     'xgb_config': {
         'model_path': 'Models/XGBoost/AlisXGB'
+    },
+    'vectorizer_config': {
+        'vectorizer': "word2vec"
+    }
+}
+
+xgboost_full_test = {
+    'model_type': 'xgboost',
+    'xgb_config': {
+        'model_path': 'Models/XGBoost/AlisXGBFull'
     },
     'vectorizer_config': {
         'vectorizer': "word2vec"

@@ -35,8 +35,6 @@ preproc_config_context = [
     remove_punctuation,
     decontracted,
     string_to_list,
-    apply_spacy,
-    decontracted,
     correct_text,
     list_to_string
 ]

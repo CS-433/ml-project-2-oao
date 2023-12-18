@@ -10,3 +10,4 @@ vocab.txt
 variables.data-00000-of-00001
 t_neg.txt
 t_pos.txt
+*.pkl

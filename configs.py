@@ -36,6 +36,11 @@ configurations = {
     'xgboost_config_test' : {
         'model_config': model_configs.xgboost_base_test,
         'preproc_config': preproc_configs.preproc_config_nocontext
+    },
+
+    'xgboost_config_full_test' : {
+        'model_config': model_configs.xgboost_full_test,
+        'preproc_config': preproc_configs.preproc_config_nocontext
     }
 }
 
