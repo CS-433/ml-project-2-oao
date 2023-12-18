@@ -42,9 +42,9 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        pos_path = '{}/train_pos_preprocessed_nocontext_v1.txt'.format(data_path)
-        neg_path = '{}/train_neg_preprocessed_nocontext_v1.txt'.format(data_path)
-        test_path = '{}/test_data_nocontext_v1.txt'.format(data_path)
+        pos_path = '{}/train_pos/partial_context.txt'.format(data_path)
+        neg_path = '{}/train_neg/partial_context.txt'.format(data_path)
+        test_path = '{}/test/test_context.txt'.format(data_path)
 
         if train:
             with open(pos_path, 'r') as f:
@@ -185,7 +185,6 @@ class TrainEngine():
 
 
 if __name__ == '__main__':
-    #SBATCH --qos=cs433
     """
     This file is used to train a model on a given training dataset
     using the specified configurations.
