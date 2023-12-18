@@ -75,7 +75,7 @@ xlnet_base_test = {
 xgboost_base_test = {
     'model_type': 'xgboost',
     'xgb_config': {
-        'model_path': 'Models/XGBoost/AlisXGB'
+        'model_path': 'Models/XGBoost/XGBPreprocnoco'
     },
     'vectorizer_config': {
         'vectorizer': "word2vec"

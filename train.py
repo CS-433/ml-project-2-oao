@@ -42,9 +42,9 @@ class TrainEngine():
         :return: pandas dataframe
         """
         # load the dataset of texts one text per line
-        pos_path = '{}/train_pos_full_preprocessed_nocontext.txt'.format(data_path)
-        neg_path = '{}/train_neg_full_preprocessed_nocontext.txt'.format(data_path)
-        test_path = '{}/test_data.txt'.format(data_path)
+        pos_path = '{}/train_pos_preprocessed_nocontext_v1.txt'.format(data_path)
+        neg_path = '{}/train_neg_preprocessed_nocontext_v1.txt'.format(data_path)
+        test_path = '{}/test_data_nocontext_v1.txt'.format(data_path)
 
         if train:
             with open(pos_path, 'r') as f:
@@ -213,7 +213,8 @@ if __name__ == '__main__':
 
     print('Initializing train engine...')
     # initializing train engine
-    engine = TrainEngine(False, config, args.train_data_path, args.save_model_path, args.save_result)
+    print('this is train:', args.train)
+    engine = TrainEngine(args.train, config, args.train_data_path, args.save_model_path, args.save_result)
 
     print('Running training...')
     # running training

@@ -26,7 +26,8 @@ negation_words = [
     "won't", "isn't", "aren't", "couldn't", "wasn't", "weren't", "haven't", "hasn't",
     "hadn't", "shouldn't", "wouldn't", "mustn't", "mightn't"
 ]
-stop_words = list((set(stopwords.words('english')) - set(negation_words)))
+non_stop_words = ['user', 'url', '<user>', '<url>']
+stop_words = list((set(stopwords.words('english')) - set(negation_words)) - set(non_stop_words))
 
 # setting up the emoticon dictionary
 emoticon_mapping = {
@@ -64,7 +65,7 @@ emoticon_mapping = {
     r'8 -?\)': '<cool or sunglasses>',
     r':\' \)': ' tears of joy ',
     # regex that matches anything between < and >
-    r'<[^>]*>': ''
+    # r'<[^>]*>': ''
 }
 
 # setting up the slang dictionary
@@ -122,7 +123,7 @@ def replace_hashtag(text: str)-> str:
         if words[i].startswith('#'):
             words[i] = slang_dict.get(words[i], words[i])
             words[i] = word_dict.get(words[i], words[i])
-            words[i] = 'talking about ' + ' '.join(wordninja.split(''.join(correct_word([words[i][1:]]))))
+            words[i] = ' hashtag ' + ' '.join(wordninja.split(''.join(correct_word([words[i][1:]]))))
     return ' '.join(words)
 
 def list_to_string(text: list) -> str:

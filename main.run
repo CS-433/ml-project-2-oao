@@ -1,5 +1,0 @@
-#!/bin/bash -l
-#SBATCH -A cs433
-#SBATCH -q cs433
-pip install -r requirements.txt
-python train.py --train_config xlnet_config_train --save_model_path AlisXLNet
