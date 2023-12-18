@@ -18,13 +18,23 @@ configurations = {
         'preproc_config': preproc_configs.preproc_config_context
     },
 
-    'xlnet_config_test' : {
-        'model_config': model_configs.xlnet_base_test,
+    'xlnet_config_part_test' : {
+        'model_config': model_configs.xlnet_base_part_test,
         'preproc_config': preproc_configs.preproc_config_context
     },
 
-    'bert_config_test' : {
-        'model_config': model_configs.bert_base_test,
+    'xlnet_config_full_test' : {
+        'model_config': model_configs.xlnet_base_full_test,
+        'preproc_config': preproc_configs.preproc_config_context
+    },
+
+    'bert_config_part_test' : {
+        'model_config': model_configs.bert_base_part_test,
+        'preproc_config': preproc_configs.preproc_config_context
+    },
+
+    'bert_config_full_test' : {
+        'model_config': model_configs.bert_base_full_test,
         'preproc_config': preproc_configs.preproc_config_context
     },
 
@@ -33,8 +43,8 @@ configurations = {
         'preproc_config': preproc_configs.preproc_config_nocontext
     },
 
-    'xgboost_config_test' : {
-        'model_config': model_configs.xgboost_base_test,
+    'xgboost_config_part_test' : {
+        'model_config': model_configs.xgboost_base_part_test,
         'preproc_config': preproc_configs.preproc_config_nocontext
     },
 

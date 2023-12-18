@@ -1,6 +1,3 @@
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from gensim.models import Word2Vec
-
 bert_base_train = {
     'model_type': 'bert',
     'model_encoder': 'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-512_A-8/1',
@@ -62,20 +59,30 @@ xgboost_base_train = {
     }
 }
 
-bert_base_test = {
+bert_base_part_test = {
     'model_type': 'bert',
-    'model_path': 'Models/model_12-02-2023-19:51:52'
+    'model_path': 'Models/AlisBERTPart/'
 }
 
-xlnet_base_test = {
+bert_base_full_test = {
+    'model_type': 'bert',
+    'model_path': 'Models/AlisBERTFull/'
+}
+
+xlnet_base_part_test = {
     'model_type': 'xlnet',
-    'model_path': 'Models/XLNet/model_12-06-2023-10:47:04/best_model/'
+    'model_path': 'Models/XLNet/AlisXLNetPart/best_model/'
 }
 
-xgboost_base_test = {
+xlnet_base_full_test = {
+    'model_type': 'xlnet',
+    'model_path': 'Models/XLNet/AlisXLNetFull/best_model/'
+}
+
+xgboost_base_part_test = {
     'model_type': 'xgboost',
     'xgb_config': {
-        'model_path': 'Models/XGBoost/XGBPreprocnoco'
+        'model_path': 'Models/XGBoost/AlisXGBPart'
     },
     'vectorizer_config': {
         'vectorizer': "word2vec"
