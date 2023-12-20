@@ -5,7 +5,7 @@ import tensorflow_hub as hub
 import tensorflow_text as text
 import numpy as np
 from official.nlp import optimization
-
+from tqdm import tqdm
 tf.get_logger().setLevel('ERROR')
 
 
@@ -81,14 +81,26 @@ class BERT(Classifier):
         self.model = tf.keras.Model(text_input, net)
         return 1
 
-    def predict(self, X: np.array) -> np.array:
+    def predict(self, X: list) -> np.array:
         """
         predicts the labels for the data
         :param data: data to be predicted
         :return: predictions
         """
-        predictions = tf.sigmoid(self.model(tf.constant(X.tolist())))
-        predictions = np.array(predictions).flatten()
+        bar = tqdm(total=len(X), desc='Predicting')
+
+        batch_size = 100
+        predictions = []
+        for i in range(0, len(X), batch_size):
+            batch_examples = X[i:i+batch_size]
+            preds = tf.sigmoid(self.model(tf.constant(batch_examples)))
+            predictions.extend(preds.numpy().flatten().tolist())
+
+            # Update the progress bar
+            bar.update(len(batch_examples))
+
+        # Close the progress bar
+        bar.close()
         predictions = np.array([1 if p > 0.5 else -1 for p in predictions])
         return predictions
 

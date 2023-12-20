@@ -5,6 +5,13 @@ Welcome to the OAO team project! This project is a text classification project d
 The goal of this project is to classify tweets as being either containing a smiling face or a sad face.\
 More concretely, we aim to predict the sentiment of tweets by classifying them as being either positive or negative.
 
+To do so, we have trained 3 different models:
+- `BERT`: a transformer-based model
+- `XLNet`: a transformer-based model
+- `XGBoost`: a gradient boosting model
+
+We have also implemented a text preprocessing pipeline that can be used to preprocess the data before training the models, as we know that social media language is often noisy and contains a lot of typos, abbreviations, etc.
+
 ## Project structure
 The project is structured as follows:
 - `Data/`: contains the data used for training and testing the model
@@ -25,6 +32,33 @@ The script takes the following arguments:
 - `train_data_path`: the path to the training data (default: `Data/twitter-datasets/`)
 - `--save_model_path`: if training a new model, the path where to save the model (default: `Models/{model_type}`)
 - `--save_result`: the path where to save the predictions on the test set (default: `Results/predictions.csv`)
+
+If you want to train one of the models, use the following command:
+```bash
+python train.py --train --train_config {train_config_name} --save_model_path {path_to_save_model}
+```
+The `train_config_name` is the name of the configuration file for training the model and can be found in the `configs.py` file.\
+The `path_to_save_model` is the path where to save the model, the saved model will be found under `Models/{model_type}/{path_to_save_model}`.
+
+If you want to make predictions on the test set, use the following command:
+```bash
+python train.py --train_config {test_config_name} --save_result {path_to_save_predictions}
+```
+The `test_config_name` is the name of the configuration for predicting and can be found in the `configs.py` file.\
+Note that if you have trained a model and saved it, you need to create a `test_model_config` in the `model_configs.py` file.\
+as well as a general configuration in the `configs.py` file.\
+More details below.
+
+Here are some example commands:
+```bash
+python train.py --train_config bert_base_part_train --save_result Results/bert_base_part_test
+```
+```bash
+python train.py --train_config xlnet_base_part_train --save_result Results/xlnet_base_part_test
+```
+```bash
+python train.py --train_config xgboost_base_part_train --save_result Results/xgboost_base_part_test
+```
 
 ***
 ## Configuration Structure
