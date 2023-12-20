@@ -51,6 +51,11 @@ configurations = {
     'xgboost_config_full_test' : {
         'model_config': model_configs.xgboost_full_test,
         'preproc_config': preproc_configs.preproc_config_nocontext
+    },
+    
+    'ensemble_config_train' : {
+        'model_config': model_configs.ensemble_train,
+        'preproc_config': preproc_configs.preproc_config_nocontext
     }
 }
 

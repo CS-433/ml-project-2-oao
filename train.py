@@ -3,6 +3,7 @@ from Classifiers.Classifier import Classifier
 from Classifiers.BERT import BERT
 from Classifiers.XGBoost import XGBoost
 from Classifiers.XLNet import XLNet
+from Classifiers.Ensemble import Ensemble
 print('Finished loading Classifiers')
 
 from TextProc.Preprocessor import Preprocessor
@@ -106,6 +107,9 @@ class TrainEngine():
             mc['best_model_dir'] = best_model_dir
             mc['tensorboard_dir'] = tensorboard_dir
             return XLNet(mc)
+        elif model_config['model_type'] == 'ensemble':
+            self.save_model_path = 'Models/Ensemble/' + self.save_model_path
+            return Ensemble(model_config)
         else:
             raise ValueError('Model type not supported')
 
