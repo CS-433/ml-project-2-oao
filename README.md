@@ -7,6 +7,7 @@ More concretely, we aim to predict the sentiment of tweets by classifying them a
 
 To do so, we have trained 3 different models:
 - `BERT`: a transformer-based model
+- `(RoBERTa)`: a transformer-based model
 - `XLNet`: a transformer-based model
 - `XGBoost`: a gradient boosting model
 
@@ -15,34 +16,54 @@ We have also implemented a text preprocessing pipeline that can be used to prepr
 ## Project structure
 The project is structured as follows:
 - `Data/`: contains the data used for training and testing the model
-- `Modles/`: contains the saved models used for inference
+- `Models/`: contains the saved models used for inference
 - `Notebooks/`: contains some notebooks used for data exploration and model training
 - `Classifiers/`: contains the code for different classifier classes used for training and inference
 - `Results/`: contains the predictions made by the models on the test set
 - `TextProc/`: contains the code for our text preprocessing methods
-- `train.py`: is the main script used for training the models and inference on the test set
+- `run.py`: is the main script used for training the models and inference on the test set
 
 ***
 
-## How to run the code
-The code can be run by executing the `train.py` script.\
+## Quick start
+We have implemented 4 different Classifiers that can be used for inference, if you just want to quickly check the results of the models, please follow the instructions below.
+1. Clone the repository
+2. Download the `Models/` folder from the following link and place it at the root of the project [here](https://drive.google.com/drive/folders/1YxYE67JtN8F41HPGZvOdhdglz1nK1U87?usp=sharing)\
+**Please Make Sure that the Models folders is at the root of the project and do not change the name of the folders inside as the scripts depends on that specific structure**
+4. If you don't have the requirements installed, the cells in notebook QuickStart.ipynb will install them for you.
+3. Then you simply used the following command to make predictions on the test set:
+```bash
+python run.py --config {test_config_name} --save_result {predictions_name}
+```
+where `test_config_name` is one of the following:
+- `bert_config_full_test`
+- `xlnet_config_part_test`
+- `xgboost_config_full_test`
+- `roberta_config_test`
+
+And `predictions_name` is the name of the file where to save the predictions on the test set. You will find the predictions under `Results/{predictions_name}.csv`.
+
+***
+
+## Train your own model
+You can run the code by executing the `run.py` script.\
 The script takes the following arguments:
-- `--train_config`: the configuration file for training the model or predicting
+- `--config`: the configuration file for training the model or predicting
 - `--train`: whether to train the model or not (default: `False`)
 - `train_data_path`: the path to the training data (default: `Data/twitter-datasets/`)
 - `--save_model_path`: if training a new model, the path where to save the model (default: `Models/{model_type}`)
-- `--save_result`: the path where to save the predictions on the test set (default: `Results/predictions.csv`)
+- `--save_result`: the path where to save the predictions on the test set (default: `predictions`)
 
 If you want to train one of the models, use the following command:
 ```bash
-python train.py --train --train_config {train_config_name} --save_model_path {path_to_save_model}
+python run.py --train --config {config_name} --save_model_path {path_to_save_model}
 ```
-The `train_config_name` is the name of the configuration file for training the model and can be found in the `configs.py` file.\
+The `config_name` is the name of the configuration file for training the model and can be found in the `configs.py` file.\
 The `path_to_save_model` is the path where to save the model, the saved model will be found under `Models/{model_type}/{path_to_save_model}`.
 
 If you want to make predictions on the test set, use the following command:
 ```bash
-python train.py --train_config {test_config_name} --save_result {path_to_save_predictions}
+python run.py --config {test_config_name} --save_result {predictions_name}
 ```
 The `test_config_name` is the name of the configuration for predicting and can be found in the `configs.py` file.\
 Note that if you have trained a model and saved it, you need to create a `test_model_config` in the `model_configs.py` file.\
@@ -51,13 +72,13 @@ More details below.
 
 Here are some example commands:
 ```bash
-python train.py --train_config bert_base_part_train --save_result Results/bert_base_part_test
+python run.py --config bert_base_part_train --save_result bert_base_part_predictions
 ```
 ```bash
-python train.py --train_config xlnet_base_part_train --save_result Results/xlnet_base_part_test
+python run.py --config xlnet_base_part_train --save_result xlnet_base_part_predictions
 ```
 ```bash
-python train.py --train_config xgboost_base_part_train --save_result Results/xgboost_base_part_test
+python run.py --config xgboost_base_part_train --save_result xgboost_base_part_predictions
 ```
 
 ***
@@ -167,7 +188,7 @@ For instance, the configuration for training `BERT` looks like this:
         'preproc_config': preproc_configs.preproc_config_context
     }
 ```
-**It is this configuration name `bert_base_part_train` that you will need to specify when running the `train.py` script.**\
+**It is this configuration name `bert_base_part_train` that you will need to specify when running the `run.py` script.**\
 And the same holds for the inference configuration.
 
 ***
@@ -191,7 +212,13 @@ The `Preprocessor` can be set to **verbose** mode, which will print the data bef
 Details about the preprocessing functions can be found in our report.
 
 ***
-## Results
+## Estimated running time
+| Model | Epochs | Time per epoch |
+|---------|-----------|--------|
+| Bert | 6 | 30min |
+| XLNet | 6 | 30min |
+| XGBoost | -- | 10 min |
+
 
 
 

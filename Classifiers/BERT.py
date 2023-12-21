@@ -81,7 +81,7 @@ class BERT(Classifier):
         self.model = tf.keras.Model(text_input, net)
         return 1
 
-    def predict(self, X: list) -> np.array:
+    def predict(self, X: np.array) -> np.array:
         """
         predicts the labels for the data
         :param data: data to be predicted

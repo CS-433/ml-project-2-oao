@@ -52,10 +52,15 @@ configurations = {
         'model_config': model_configs.xgboost_full_test,
         'preproc_config': preproc_configs.preproc_config_nocontext
     },
-    
-    'ensemble_config_train' : {
-        'model_config': model_configs.ensemble_train,
-        'preproc_config': preproc_configs.preproc_config_nocontext
+
+    'roberta_config_train': {
+      'model_config': model_configs.roberta_base_train,
+      'preproc_config': preproc_configs.preproc_config_context
+    },
+
+    'roberta_config_test': {
+      'model_config': model_configs.roberta_base_test,
+      'preproc_config': preproc_configs.preproc_config_context
     }
 }
 
